@@ -1,55 +1,48 @@
 import { Router } from 'express';
 import * as postCtrl from '../controllers/postController.js';
-import {
-  getPostDetailsWrapper,
-  verifyJWT,
-  verifyPostExist,
-  verifyPostOwner,
-  verifyPostPublished,
-  verifyCommentExist,
-  verifyCommentOwner,
-} from '../middlewares/auth.js';
+import * as auth from '../middlewares/auth.js';
 import { postValidator } from '../middlewares/validator.js';
 
 const postRouter = Router();
-postRouter
-  .route('/:postId/comments/:commentId')
-  .get(verifyCommentExist, postCtrl.getSingleComment)
-  .put(
-    verifyJWT,
-    verifyPostExist,
-    verifyCommentExist,
-    verifyCommentOwner,
-    postCtrl.updateComment,
-  )
-  .delete(
-    verifyJWT,
-    verifyPostExist,
-    verifyCommentExist,
-    verifyCommentOwner,
-    postCtrl.deleteComment,
-  );
+
 postRouter
   .route('/:postId/comments')
-  .get(verifyPostExist, verifyPostPublished, postCtrl.getCommentsByPost)
-  .post(verifyJWT, verifyPostExist, postCtrl.createComment);
+  .get(
+    auth.verifyPostExist,
+    auth.verifyPostPublished,
+    postCtrl.getCommentsByPost,
+  );
 postRouter
   .route('/:postId/publish')
-  .patch(verifyJWT, verifyPostExist, verifyPostOwner, postCtrl.publishPost);
+  .patch(
+    auth.verifyJWT,
+    auth.verifyPostExist,
+    auth.verifyPostOwner,
+    postCtrl.publishPost,
+  );
 postRouter
   .route('/:postId')
-  .get(verifyPostExist, getPostDetailsWrapper(), postCtrl.getSinglePost)
+  .get(
+    auth.verifyPostExist,
+    auth.getPostDetailsWrapper(),
+    postCtrl.getSinglePost,
+  )
   .put(
-    verifyJWT,
-    verifyPostExist,
+    auth.verifyJWT,
+    auth.verifyPostExist,
     postValidator,
-    verifyPostOwner,
+    auth.verifyPostOwner,
     postCtrl.updatePost,
   )
-  .delete(verifyJWT, verifyPostExist, verifyPostOwner, postCtrl.deletePost);
+  .delete(
+    auth.verifyJWT,
+    auth.verifyPostExist,
+    auth.verifyPostOwner,
+    postCtrl.deletePost,
+  );
 postRouter
   .route('/')
   .get(postCtrl.getAllPosts)
-  .post(verifyJWT, postValidator, postCtrl.createPost);
+  .post(auth.verifyJWT, postValidator, postCtrl.createPost);
 
 export default postRouter;
