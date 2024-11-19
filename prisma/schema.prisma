@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  fullName String
+  email    String @unique
+  password String
+
+  posts    Post[]
+  comments Comment[]
+
+  role       Role     @default(USER)
+  createDate DateTime @default(now())
+}
+
+model Post {
+  id       String     @id @default(uuid())
+  title    String
+  content  Json
+  category Category[]
+
+  userId   String?
+  comments Comment[]
+
+  published   Boolean   @default(false)
+  publishDate DateTime?
+  editDate    DateTime  @updatedAt
+
+  user User? @relation(onDelete: SetNull, fields: [userId], references: [id])
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  content Json
+
+  userId String?
+  postId String
+
+  createDate DateTime @default(now())
+  editDate   DateTime @updatedAt
+
+  user User? @relation(onDelete: SetNull, fields: [userId], references: [id])
+  post Post  @relation(fields: [postId], references: [id])
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String
+  posts Post[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
