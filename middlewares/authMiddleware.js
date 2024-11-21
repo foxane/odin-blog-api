@@ -54,3 +54,17 @@ export const verifyPostExist = async (req, res, next) => {
   req.post = post;
   next();
 };
+
+export const verifyCommentExist = async (req, res, next) => {
+  const comment = await prisma.comment.findUnique({
+    where: { id: req.params.commentId },
+  });
+  if (!comment)
+    return errorResponse(res, {
+      statusCode: 404,
+      message: 'Comment not found',
+    });
+
+  req.comment = comment;
+  next();
+};

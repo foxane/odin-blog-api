@@ -27,3 +27,13 @@
 | `/:postId` | **PUT**    | title, content             | author | Update post                       |
 | `/:postId` | **PATCH**  | publish: ['true', 'false'] | author | Publish post                      |
 | `/:postId` | **DELETE** |                            | author | Delete post                       |
+
+### `/comments`
+
+| Endpoint      | Method     | Payload | Auth | Description                         |
+| ------------- | ---------- | ------- | ---- | ----------------------------------- |
+| `/`           | **GET**    |         | none | Set postId url query to get by post |
+| `/`           | **POST**   | content | user | Set postId url to create            |
+| `/:commentId` | **GET**    |         | none |                                     |
+| `/:commentId` | **PUT**    | content | user | Edit comment                        |
+| `/:commentId` | **DELETE** |         | user | Delete                              |

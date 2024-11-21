@@ -55,4 +55,5 @@ export const regValidation = [
 ];
 
 export const postValidation = [rules.title, rules.content, handleError];
+export const commentValidation = [rules.content, handleError];
 export const loginValidation = [rules.email, rules.password, handleError];
