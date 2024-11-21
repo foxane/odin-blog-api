@@ -22,7 +22,11 @@ export const register = async (req, res, next) => {
     statusCode: 201,
     message: 'Account created',
     data: {
-      token: createJWT({ id: user.id, name: user.name }),
+      token: createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
     },
   });
 };
@@ -47,7 +51,11 @@ export const login = async (req, res, next) => {
   successResponse(res, {
     statusCode: 200,
     data: {
-      token: createJWT({ id: user.id, name: user.name }),
+      token: createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
     },
   });
 };
