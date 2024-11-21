@@ -41,3 +41,16 @@ export const verifyUserExist = async (req, res, next) => {
 
   next();
 };
+
+export const verifyPostExist = async (req, res, next) => {
+  const { postId } = req.params;
+  const post = await prisma.post.findUnique({ where: { id: postId } });
+  if (!post)
+    return errorResponse(res, {
+      statusCode: 404,
+      message: 'Post not found',
+    });
+
+  req.post = post;
+  next();
+};

@@ -33,6 +33,18 @@ const rules = {
     .withMessage('Password cannot be empty')
     .isLength({ min: 2 })
     .withMessage('Password need to be at least 2 character'),
+  title: body('title')
+    .trim()
+    .notEmpty()
+    .withMessage('Title cannot be empty')
+    .isLength({ min: 10 })
+    .withMessage('Title need to be at least 10 characters long'),
+  content: body('content')
+    .trim()
+    .notEmpty()
+    .withMessage('Title cannot be empty')
+    .isLength({ min: 10 })
+    .withMessage('Comment need to be at least 100 characters long'),
 };
 
 export const regValidation = [
@@ -42,4 +54,5 @@ export const regValidation = [
   handleError,
 ];
 
+export const postValidation = [rules.title, rules.content, handleError];
 export const loginValidation = [rules.email, rules.password, handleError];
