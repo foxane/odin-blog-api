@@ -3,7 +3,7 @@ import { successResponse, errorResponse } from '../utils/response.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const createJWT = payload =>
+export const createJWT = payload =>
   jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 export const register = async (req, res, next) => {
