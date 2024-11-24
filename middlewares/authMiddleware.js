@@ -28,57 +28,73 @@ export const verifyJWT = async (req, res, next) => {
 };
 
 export const verifyUserExist = async (req, res, next) => {
-  const { userId } = req.params;
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user)
-    return errorResponse(res, {
-      statusCode: 404,
-      message: 'User not found',
+  try {
+    const { userId } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
     });
 
-  next();
+    if (!user)
+      return errorResponse(res, {
+        statusCode: 404,
+        message: 'User not found',
+      });
+
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const verifyPostExist = async (req, res, next) => {
-  const { postId } = req.params;
-  const post = await prisma.post.findUnique({ where: { id: postId } });
-  if (!post)
-    return errorResponse(res, {
-      statusCode: 404,
-      message: 'Post not found',
-    });
+  try {
+    const { postId } = req.params;
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+    if (!post)
+      return errorResponse(res, {
+        statusCode: 404,
+        message: 'Post not found',
+      });
 
-  req.post = post;
-  next();
+    req.post = post;
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const verifyCommentExist = async (req, res, next) => {
-  const comment = await prisma.comment.findUnique({
-    where: { id: req.params.commentId },
-  });
-  if (!comment)
-    return errorResponse(res, {
-      statusCode: 404,
-      message: 'Comment not found',
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: req.params.commentId },
     });
+    if (!comment)
+      return errorResponse(res, {
+        statusCode: 404,
+        message: 'Comment not found',
+      });
 
-  req.comment = comment;
-  next();
+    req.comment = comment;
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const verifyCategoryExist = async (req, res, next) => {
-  const category = await prisma.category.findUnique({
-    where: { id: req.params.categoryId },
-  });
-  if (!category)
-    return errorResponse(res, {
-      statusCode: 404,
-      message: 'Category not found',
+  try {
+    const category = await prisma.category.findUnique({
+      where: { id: req.params.categoryId },
     });
+    if (!category)
+      return errorResponse(res, {
+        statusCode: 404,
+        message: 'Category not found',
+      });
 
-  res.category = category;
-  next();
+    res.category = category;
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
