@@ -137,3 +137,40 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllUserPost = async (req, res, next) => {
+  try {
+    if (req.params.userId !== req.user.id || req.user.authValue < 3)
+      return errorResponse(res, {
+        statusCode: 403,
+        message: "You are not allowed to see this user's unpublished post",
+      });
+
+    const posts = await prisma.post.findMany({
+      where: { userId: req.params.userId },
+    });
+
+    successResponse(res, {
+      data: { posts },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPublishedUserPost = async (req, res, next) => {
+  try {
+    const posts = await prisma.post.findMany({
+      where: {
+        userId: req.params.userId,
+        published: true,
+      },
+    });
+
+    successResponse(res, {
+      data: { posts },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

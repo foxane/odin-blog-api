@@ -9,13 +9,15 @@
 
 ### `/users`
 
-| Endpoint    | Method     | Payload               | Auth  | Description                        |
-| ----------- | ---------- | --------------------- | ----- | ---------------------------------- |
-| `/`         | **GET**    |                       | admin | Get all users details              |
-| `/<userId>` | **GET**    |                       | none  | Get users details                  |
-| `/<userId>` | **PUT**    | name, email, password | user  | Edit user details                  |
-| `/<userId>` | **PATCH**  | secret                | user  | Make user author, code is : `babi` |
-| `/<userId>` | **DELETE** |                       | admin | Delete user                        |
+| Endpoint             | Method     | Payload               | Auth       | Description                        |
+| -------------------- | ---------- | --------------------- | ---------- | ---------------------------------- |
+| `/`                  | **GET**    |                       | admin      | Get all users details              |
+| `/:userId`           | **GET**    |                       | none       | Get users details                  |
+| `/:userId`           | **PUT**    | name, email, password | user       | Edit user details                  |
+| `/:userId`           | **PATCH**  | secret                | user       | Make user author, code is : `babi` |
+| `/:userId`           | **DELETE** |                       | admin      | Delete user                        |
+| `/:userId/posts`     | **GET**    |                       | none       | Get all user's published post      |
+| `/:userId/posts/all` | **GET**    |                       | user/admin | All user's postPublished or not    |
 
 ### `/posts`
 
