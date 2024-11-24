@@ -119,3 +119,23 @@ export const publishPost = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getCommentByPost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      select: {
+        createdAt: true,
+        content: true,
+        User: { select: { id: true, name: true } },
+      },
+    });
+
+    successResponse(res, {
+      data: { comments },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

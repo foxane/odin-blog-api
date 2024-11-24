@@ -3,6 +3,7 @@ import {
   createPost,
   deletePost,
   getAllPost,
+  getCommentByPost,
   getSinglePost,
   publishPost,
   updatePost,
@@ -11,6 +12,7 @@ import { postValidation } from '../middlewares/validator.js';
 import { verifyJWT, verifyPostExist } from '../middlewares/authMiddleware.js';
 
 const postRouter = Router();
+postRouter.route('/:postId/comments').get(getCommentByPost);
 postRouter
   .route('/:postId')
   .get(verifyPostExist, getSinglePost)

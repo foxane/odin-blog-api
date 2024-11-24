@@ -19,24 +19,25 @@
 
 ### `/posts`
 
-| Endpoint   | Method     | Payload                    | Auth   | Description                       |
-| ---------- | ---------- | -------------------------- | ------ | --------------------------------- |
-| `/`        | **GET**    |                            | none   | Get all published posts           |
-| `/`        | **POST**   | title, content             | author | Create new post                   |
-| `/:postId` | **GET**    |                            | none   | Get single post, published or not |
-| `/:postId` | **PUT**    | title, content             | author | Update post                       |
-| `/:postId` | **PATCH**  | publish: ['true', 'false'] | author | Publish post                      |
-| `/:postId` | **DELETE** |                            | author | Delete post                       |
+| Endpoint            | Method     | Payload                    | Auth   | Description                       |
+| ------------------- | ---------- | -------------------------- | ------ | --------------------------------- |
+| `/`                 | **GET**    |                            | none   | Get all published posts           |
+| `/`                 | **POST**   | title, content             | author | Create new post                   |
+| `/:postId`          | **GET**    |                            | none   | Get single post, published or not |
+| `/:postId`          | **PUT**    | title, content             | author | Update post                       |
+| `/:postId`          | **PATCH**  | publish: ['true', 'false'] | author | Publish post                      |
+| `/:postId`          | **DELETE** |                            | author | Delete post                       |
+| `/:postId/comments` | **GET**    |                            | none   | Get all comment on this post      |
 
 ### `/comments`
 
-| Endpoint      | Method     | Payload | Auth | Description                         |
-| ------------- | ---------- | ------- | ---- | ----------------------------------- |
-| `/`           | **GET**    |         | none | Set postId url query to get by post |
-| `/`           | **POST**   | content | user | Set postId url to create            |
-| `/:commentId` | **GET**    |         | none |                                     |
-| `/:commentId` | **PUT**    | content | user | Edit comment                        |
-| `/:commentId` | **DELETE** |         | user | Delete                              |
+| Endpoint      | Method     | Payload | Auth  | Description                |
+| ------------- | ---------- | ------- | ----- | -------------------------- |
+| `/`           | **GET**    |         | admin | Get all comments ever made |
+| `/`           | **POST**   | content | user  | Set postId url to create   |
+| `/:commentId` | **GET**    |         | none  |                            |
+| `/:commentId` | **PUT**    | content | user  | Edit comment               |
+| `/:commentId` | **DELETE** |         | user  | Delete                     |
 
 ### `/categories`
 
