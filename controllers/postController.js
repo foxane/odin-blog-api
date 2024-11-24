@@ -5,6 +5,12 @@ export const getAllPost = async (req, res, next) => {
   try {
     const posts = await prisma.post.findMany({
       where: { published: true },
+      include: {
+        User: {
+          select: { id: true, name: true },
+        },
+        categories: true,
+      },
     });
 
     successResponse(res, {
@@ -22,16 +28,25 @@ export const getSinglePost = async (req, res, next) => [
 ];
 
 export const createPost = async (req, res, next) => {
-  try {
-    const { title, content, categories } = req.body;
-    if (req.user.authValue < 2)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'You are not Author',
-      });
+  const { title, content, categories } = req.body;
+  if (req.user.authValue < 2)
+    return errorResponse(res, {
+      statusCode: 403,
+      message: 'You are not Author',
+    });
 
+  const cats = categories.map(val => {
+    return { id: val };
+  });
+
+  try {
     await prisma.post.create({
-      data: { title, content, categories, userId: req.user.id },
+      data: {
+        title,
+        content,
+        userId: req.user.id,
+        categories: { connect: cats },
+      },
     });
 
     successResponse(res, {
@@ -43,22 +58,25 @@ export const createPost = async (req, res, next) => {
 };
 
 export const updatePost = async (req, res, next) => {
-  try {
-    const { title, content, categories } = req.body;
-    const { post } = req;
-    console.log(post.userId === req.user.id);
-    if (post.userId !== req.user.id)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'You are not author of this post',
-      });
+  const { title, content, categories } = req.body;
+  const { post } = req;
+  if (post.userId !== req.user.id)
+    return errorResponse(res, {
+      statusCode: 403,
+      message: 'You are not author of this post',
+    });
 
+  const cats = categories.map(val => {
+    return { id: val };
+  });
+
+  try {
     await prisma.post.update({
       where: { id: post.id },
       data: {
         title,
         content,
-        categories,
+        categories: { connect: cats },
       },
     });
 
