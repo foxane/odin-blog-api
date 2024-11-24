@@ -45,6 +45,13 @@ const rules = {
     .withMessage('Title cannot be empty')
     .isLength({ min: 10 })
     .withMessage('Comment need to be at least 100 characters long'),
+
+  category: body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Category name cannot be empty')
+    .isLength({ min: 2 })
+    .withMessage('Category name need to be at least 2 characters long'),
 };
 
 export const regValidation = [
@@ -57,3 +64,4 @@ export const regValidation = [
 export const postValidation = [rules.title, rules.content, handleError];
 export const commentValidation = [rules.content, handleError];
 export const loginValidation = [rules.email, rules.password, handleError];
+export const categoryValidation = [rules.category, handleError];

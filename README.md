@@ -37,3 +37,13 @@
 | `/:commentId` | **GET**    |         | none |                                     |
 | `/:commentId` | **PUT**    | content | user | Edit comment                        |
 | `/:commentId` | **DELETE** |         | user | Delete                              |
+
+### `/categories`
+
+| Endpoint       | Method     | Payload | Auth   | Description           |
+| -------------- | ---------- | ------- | ------ | --------------------- |
+| `/`            | **GET**    |         | none   | Get all categories    |
+| `/`            | **POST**   | name    | author | Create new categories |
+| `/:categoryId` | **GET**    |         | none   | Get single category   |
+| `/:categoryId` | **PUT**    | name    | author | Update category       |
+| `/:categoryId` | **DELETE** |         | author | Delete category       |

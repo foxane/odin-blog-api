@@ -68,3 +68,17 @@ export const verifyCommentExist = async (req, res, next) => {
   req.comment = comment;
   next();
 };
+
+export const verifyCategoryExist = async (req, res, next) => {
+  const category = await prisma.category.findUnique({
+    where: { id: req.params.categoryId },
+  });
+  if (!category)
+    return errorResponse(res, {
+      statusCode: 404,
+      message: 'Category not found',
+    });
+
+  res.category = category;
+  next();
+};
