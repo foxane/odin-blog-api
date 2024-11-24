@@ -1,13 +1,21 @@
 import { successResponse, errorResponse } from '../utils/response.js';
 import prisma from '../prisma/prismaClient.js';
 
-export const getCommentByPost = async (req, res, next) => {
-  try {
-    const where = {};
-    if (req.query.postId) where.postId = req.query.postId;
+export const getAllComment = async (req, res, next) => {
+  if (req.user.authValue < 3)
+    return errorResponse(res, {
+      statusCode: 403,
+      message: 'Admin only',
+    });
 
+  try {
     const comments = await prisma.comment.findMany({
-      where,
+      select: {
+        createdAt: true,
+        content: true,
+        User: { select: { id: true, name: true } },
+        Post: { select: { id: true, title: true } },
+      },
     });
 
     successResponse(res, {

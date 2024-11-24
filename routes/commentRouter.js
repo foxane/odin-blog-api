@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   createComment,
   deleteComment,
-  getCommentByPost,
+  getAllComment,
   getSingleComment,
   updateComment,
 } from '../controllers/commentController.js';
@@ -21,7 +21,7 @@ commentRouter
 
 commentRouter
   .route('/')
-  .get(getCommentByPost)
+  .get(verifyJWT, getAllComment)
   .post(verifyJWT, commentValidation, createComment);
 
 export default commentRouter;
