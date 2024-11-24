@@ -51,6 +51,5 @@ model Category {
   id   String @id @default(uuid())
   name String
 
-  Post   Post?   @relation(fields: [postId], references: [id])
-  postId String?
+  posts Post[]
 }
