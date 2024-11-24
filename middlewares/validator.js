@@ -1,3 +1,4 @@
+import prisma from '../prisma/prismaClient.js';
 import { body, validationResult } from 'express-validator';
 import { errorResponse } from '../utils/response.js';
 
@@ -27,6 +28,16 @@ const rules = {
     .withMessage('Email cannot be empty')
     .isEmail()
     .withMessage('Not valid email'),
+
+  emailInUse: body('email').custom(async email => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (user) {
+      throw new Error('Email is already in use');
+    }
+
+    return true;
+  }),
+
   password: body('password')
     .trim()
     .notEmpty()
@@ -57,6 +68,7 @@ const rules = {
 export const regValidation = [
   rules.name,
   rules.email,
+  rules.emailInUse,
   rules.password,
   handleError,
 ];
