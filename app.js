@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 
+import corsConfig from './middlewares/cors.js';
 import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
 import postRouter from './routes/postRouter.js';
@@ -12,7 +14,7 @@ import {
 } from './middlewares/errorMiddleware.js';
 
 const app = express();
-
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
