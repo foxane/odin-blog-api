@@ -89,7 +89,7 @@ export const makeAuthor = async (req, res, next) => {
         message: 'Wrong secret code',
       });
 
-    if (req.user.authValue > 2)
+    if (req.user.authValue >= 2)
       return errorResponse(res, {
         statusCode: 400,
         message: "You're already an author",
@@ -97,20 +97,19 @@ export const makeAuthor = async (req, res, next) => {
 
     const user = await prisma.user.update({
       where: { id: userId },
-      message: 'User data updated',
       data: {
-        token: createJWT({
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        }),
+        authValue: 2,
       },
     });
 
     successResponse(res, {
       message: 'You are now author',
       data: {
-        token: createJWT(),
+        token: createJWT({
+          id: user.id,
+          name: user.name,
+          authValue: user.authValue,
+        }),
       },
     });
   } catch (error) {
