@@ -142,7 +142,7 @@ export const getAllUserPost = async (req, res, next) => {
     if (req.params.userId !== req.user.id || req.user.authValue < 3)
       return errorResponse(res, {
         statusCode: 403,
-        message: "You are not allowed to see this user's unpublished post",
+        message: 'You need to be respective user or an admin to see this',
       });
 
     const posts = await prisma.post.findMany({

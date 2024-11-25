@@ -35,17 +35,18 @@ export const createPost = async (req, res, next) => {
       message: 'You are not Author',
     });
 
-  const cats = categories.map(val => {
-    return { id: val };
-  });
-
   try {
     await prisma.post.create({
       data: {
         title,
         content,
         userId: req.user.id,
-        categories: { connect: cats },
+        categories: {
+          connectOrCreate: categories.map(cat => ({
+            where: { name: cat },
+            create: { name: cat },
+          })),
+        },
       },
     });
 
@@ -66,17 +67,19 @@ export const updatePost = async (req, res, next) => {
       message: 'You are not author of this post',
     });
 
-  const cats = categories.map(val => {
-    return { id: val };
-  });
-
   try {
     await prisma.post.update({
       where: { id: post.id },
       data: {
         title,
         content,
-        categories: { connect: cats },
+        categories: {
+          connectOrCreate: categories.map(cat => ({
+            where: { name: cat },
+            create: { name: cat },
+          })),
+          set: categories.map(cat => ({ name: cat })),
+        },
       },
     });
 

@@ -5,7 +5,7 @@ import { errorResponse } from '../utils/response.js';
 const handleError = (req, res, next) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    errorResponse(res, {
+    return errorResponse(res, {
       statusCode: 400,
       message: 'Validation failed',
       errorDetails: result.array(),
@@ -63,6 +63,23 @@ const rules = {
     .withMessage('Category name cannot be empty')
     .isLength({ min: 2 })
     .withMessage('Category name need to be at least 2 characters long'),
+
+  categories: body('categories')
+    .custom(cats => {
+      if (typeof cats !== 'object' || !Array.isArray(cats)) {
+        throw new Error('Category needs to be an array, even if its empty');
+      }
+
+      cats.forEach(cat => {
+        if (typeof cat !== 'string' || cat.length < 2)
+          throw new Error(
+            'Category name should be string and at least 2 character',
+          );
+      });
+
+      return true;
+    })
+    .toLowerCase(),
 };
 
 export const regValidation = [
@@ -73,7 +90,12 @@ export const regValidation = [
   handleError,
 ];
 
-export const postValidation = [rules.title, rules.content, handleError];
+export const postValidation = [
+  rules.title,
+  rules.content,
+  rules.categories,
+  handleError,
+];
 export const commentValidation = [rules.content, handleError];
 export const loginValidation = [rules.email, rules.password, handleError];
 export const categoryValidation = [rules.category, handleError];

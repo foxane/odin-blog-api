@@ -12,7 +12,7 @@ import { postValidation } from '../middlewares/validator.js';
 import { verifyJWT, verifyPostExist } from '../middlewares/authMiddleware.js';
 
 const postRouter = Router();
-postRouter.route('/:postId/comments').get(getCommentByPost);
+postRouter.route('/:postId/comments').get(verifyPostExist, getCommentByPost);
 postRouter
   .route('/:postId')
   .get(verifyPostExist, getSinglePost)
