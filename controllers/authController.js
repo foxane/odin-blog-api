@@ -28,6 +28,11 @@ export const register = async (req, res, next) => {
           name: user.name,
           authValue: user.authValue,
         }),
+        user: {
+          id: user.id,
+          name: user.name,
+          authValue: user.authValue,
+        },
       },
     });
   } catch (error) {
@@ -63,6 +68,11 @@ export const login = async (req, res, next) => {
           name: user.name,
           authValue: user.authValue,
         }),
+        user: {
+          id: user.id,
+          name: user.name,
+          authValue: user.authValue,
+        },
       },
     });
   } catch (error) {
