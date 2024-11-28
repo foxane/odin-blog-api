@@ -32,7 +32,6 @@ export const getSingleUser = async (req, res, next) => {
         name: true,
         email: true,
         authValue: true,
-        posts: { where: { published: true } },
       },
     });
 
