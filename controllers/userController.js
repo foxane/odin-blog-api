@@ -43,6 +43,27 @@ export const getSingleUser = async (req, res, next) => {
   }
 };
 
+export const getSelf = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        authValue: true,
+        email: true,
+      },
+    });
+
+    successResponse(res, {
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;

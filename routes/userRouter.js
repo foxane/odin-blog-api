@@ -4,6 +4,7 @@ import {
   getAllUser,
   getAllUserPost,
   getPublishedUserPost,
+  getSelf,
   getSingleUser,
   makeAuthor,
   updateUser,
@@ -11,6 +12,7 @@ import {
 import { verifyJWT, verifyUserExist } from '../middlewares/authMiddleware.js';
 
 const userRouter = Router();
+userRouter.route('/me').get(verifyJWT, getSelf);
 userRouter.route('/:userId/posts/all').get(verifyJWT, getAllUserPost);
 userRouter.route('/:userId/posts').get(getPublishedUserPost);
 userRouter
