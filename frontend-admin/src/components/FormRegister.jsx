@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 import Form from './ui/Form';
 import FormControl from './ui/FormControl';
 import Input from './ui/Input';
 import Button from './ui/Button';
-import PropTypes from 'prop-types';
 import { post } from '../utils/api';
 
 export default function FormRegister({ setLoading }) {
@@ -14,24 +15,24 @@ export default function FormRegister({ setLoading }) {
   const [conPassword, setConPassword] = useState('');
   const [isMatch, setIsMatch] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsMatch(password === conPassword);
   }, [password, conPassword]);
 
-  async function onSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault();
     if (!isMatch) return;
     setLoading(true);
 
-    try {
-      const data = await post('/auth/register', { name, email, password });
-      localStorage.setItem('token', data.token);
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
-    }
+    post('/auth/register', { name, email, password })
+      .then(data => {
+        localStorage.setItem('token', data.token);
+        navigate('/');
+      })
+      .catch(error => setError(error))
+      .finally(() => setLoading(false));
   }
 
   return (

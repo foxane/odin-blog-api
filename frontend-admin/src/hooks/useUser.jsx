@@ -18,8 +18,6 @@ const useUser = () => {
         );
 
         const data = await response.json();
-        console.log(data.data.user);
-
         if (!data.success) {
           throw new Error(data.message);
         }
