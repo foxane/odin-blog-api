@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Form from '../../components/ui/Form';
 import FormControl from '../../components/ui/FormControl';
@@ -6,9 +6,22 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { AuthContext } from '../../AuthProvider';
 
-export default function FormLogin() {
-  const [form, setForm] = useState({ email: '', password: '' });
+export default function FormRegister() {
   const { fetchAuth, error } = useContext(AuthContext);
+  const [pwMatch, setPwMatch] = useState(true);
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPw: '',
+  });
+
+  useEffect(() => {
+    const { password, confirmPw } = form;
+    setPwMatch(password === confirmPw);
+
+    // Implement checking email is avail. in the future
+  }, [form]);
 
   function onChange(e) {
     setForm({
@@ -19,6 +32,10 @@ export default function FormLogin() {
 
   function onSubmit(e) {
     e.preventDefault();
+    if (!pwMatch) return;
+
+    fetchAuth(form, false);
+    if (error) return; // Prevent login if error is defined
     fetchAuth(form);
   }
 
@@ -35,14 +52,12 @@ export default function FormLogin() {
       )}
 
       <FormControl>
+        <label htmlFor="name">Name</label>
+        <Input id={'name'} name={'name'} onChange={onChange} />
+      </FormControl>
+      <FormControl>
         <label htmlFor="email">Email</label>
-        <Input
-          id={'email'}
-          name={'email'}
-          type={'email'}
-          onChange={onChange}
-          value={form.email}
-        />
+        <Input id={'email'} name={'email'} type={'email'} onChange={onChange} />
       </FormControl>
       <FormControl>
         <label htmlFor="password">Password</label>
@@ -51,9 +66,23 @@ export default function FormLogin() {
           name={'password'}
           type={'password'}
           onChange={onChange}
-          value={form.password}
+          className={`${!pwMatch ? 'border-red-500' : ''}`}
         />
       </FormControl>
+      <FormControl>
+        <label htmlFor="confirmPw">Confirm Password</label>
+        <Input
+          id={'confirmPw'}
+          name={'confirmPw'}
+          type={'password'}
+          onChange={onChange}
+          className={`${!pwMatch ? 'border-red-500' : ''}`}
+        />
+        <p className={`text-sm text-red-500 ${pwMatch ? 'opacity-0' : ''}`}>
+          Password did not match
+        </p>
+      </FormControl>
+
       <Button
         type={'submit'}
         className={'mt-2 mx-auto bg-blue-500 text-white hover:bg-blue-700'}>

@@ -38,25 +38,28 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async credentials => {
+  const fetchAuth = async (credentials, isLogin = true) => {
+    const endpoint = isLogin ? 'login' : 'register';
     setLoading(true);
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
+        `${import.meta.env.VITE_API_URL}/auth/${endpoint}`,
         credentials,
       );
 
       localStorage.setItem('token', data.data.token);
       setUser(data.data.user);
     } catch (error) {
-      // Server did not response
       if (!error.response) {
+        // Server did not response
         setError(new Error('Network error, server seems to be offline'));
       } else {
         // Server response
         setError(
           new ApiError(
-            `Login failed: ${error.response.data.message}`,
+            `${isLogin ? 'Login' : 'Registration'} failed: ${
+              error.response.data.message
+            }`,
             error.response.data.errorDetails,
           ),
         );
@@ -68,11 +71,12 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    setError(null);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, error }}>
+    <AuthContext.Provider value={{ user, fetchAuth, logout, loading, error }}>
       {children}
     </AuthContext.Provider>
   );

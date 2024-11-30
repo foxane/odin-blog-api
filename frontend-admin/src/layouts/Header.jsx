@@ -24,7 +24,7 @@ const Header = () => {
             <a
               target="#"
               onClick={logout}
-              className="text-sm underline text-red-500 hover:text-red-700">
+              className="text-sm underline text-red-500 cursor-pointer hover:text-red-700">
               Logout
             </a>
           </div>
