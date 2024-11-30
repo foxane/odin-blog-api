@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { useContext } from 'react';
-import { UserContext } from '../context/UserProvider';
-import loadingIcon from '../assets/loading.svg';
+import { AuthContext } from '../AuthProvider';
 
 const Header = () => {
-  const { user, loading, logout } = useContext(UserContext);
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <header className="p-2 px-10 border-b-2 bg-slate-200 shadow shadow-slate-400">
@@ -16,8 +15,6 @@ const Header = () => {
             blogName
           </p>
         </Link>
-
-        {loading && <img src={loadingIcon} className="w-8" />}
 
         {user && (
           <div className="flex gap-2 items-center">

@@ -1,13 +1,10 @@
 import { useContext } from 'react';
-import { UserContext } from '../context/UserProvider';
 import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../AuthProvider';
 
-const Author = () => {
-  const { user } = useContext(UserContext);
+export default function Author() {
+  const { user } = useContext(AuthContext);
 
-  if (!user) return <Navigate to={'/auth'} />;
-
-  return <div>Author page</div>;
-};
-
-export default Author;
+  if (!user) return <Navigate to={'/login'} />;
+  return <>Author page</>;
+}

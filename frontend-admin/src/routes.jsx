@@ -9,12 +9,13 @@ const routes = createBrowserRouter([
     element: <Layout />,
     children: [
       {
+        path: '/',
         index: true,
         element: <Author />,
       },
       {
         // Not logged in user redirected here
-        path: '/auth',
+        path: '/login',
         element: <AuthPage />,
       },
     ],
