@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router';
 import Layout from './layouts/Layout';
-import Author from './pages/Author';
+import Author from './pages/authorPage/Author';
 import AuthPage from './pages/authPage/AuthPage';
+import { AuthorRoute, UserRoute } from './ProtectedRoutes';
 
 const routes = createBrowserRouter([
   {
@@ -11,7 +12,7 @@ const routes = createBrowserRouter([
       {
         path: '/',
         index: true,
-        element: <Author />,
+        element: <UserRoute element={<AuthorRoute element={<Author />} />} />,
       },
       {
         // Not logged in user redirected here
