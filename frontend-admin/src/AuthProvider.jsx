@@ -10,21 +10,26 @@ const AuthContext = createContext({
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
+      setLoading(true);
       axios
-        .get(`${import.meta.env.VITE_AI_URL}/users/me`, {
+        .get(`${import.meta.env.VITE_API_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then(response => setUser(response.data.user))
-        .catch(() => logout());
+        .then(response => {
+          setUser(response.data.data.user);
+        })
+        .catch(() => logout())
+        .finally(() => setLoading(false));
     }
   }, []);
 
   const login = async credentials => {
-    const { data } = await axios.post('/api/login', credentials);
+    const { data } = await axios.post('/auth/login', credentials);
     localStorage.setItem('token', data.token);
     setUser(data.user);
   };
@@ -35,7 +40,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
