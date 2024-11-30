@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import Layout from './layouts/Layout';
 import Author from './pages/Author';
-import AuthPage from './pages/AuthPage';
+import AuthPage from './pages/authPage/AuthPage';
 
 const routes = createBrowserRouter([
   {
