@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import Form from '../../components/ui/Form';
 import FormControl from '../../components/ui/FormControl';
@@ -8,20 +8,13 @@ import { AuthContext } from '../../AuthProvider';
 
 export default function FormRegister() {
   const { fetchAuth, error } = useContext(AuthContext);
-  const [pwMatch, setPwMatch] = useState(true);
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
     confirmPw: '',
   });
-
-  useEffect(() => {
-    const { password, confirmPw } = form;
-    setPwMatch(password === confirmPw);
-
-    // Implement checking email is avail. in the future
-  }, [form]);
+  const pwMatch = form.password === form.confirmPw;
 
   function onChange(e) {
     setForm({
