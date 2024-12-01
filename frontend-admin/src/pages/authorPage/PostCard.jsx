@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 import editIcon from '../../assets/edit.svg';
 import trashIcon from '../../assets/trash.svg';
+import { formatDate } from '../../lib/utils';
 
 export default function PostCard({ post }) {
   return (
@@ -18,7 +19,7 @@ export default function PostCard({ post }) {
           <p className="text-sm text-neutral-800">
             Published at:
             <span className="font-semibold italic p-2">
-              {post.publishedAt ? post.publishedAt : 'Unpublished'}
+              {post.publishedAt ? formatDate(post.publishedAt) : 'Unpublished'}
             </span>
           </p>
           <p className="text-sm text-neutral-800">

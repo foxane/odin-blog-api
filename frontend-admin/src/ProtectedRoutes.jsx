@@ -12,7 +12,7 @@ export function UserRoute({ element }) {
 
 export function AuthorRoute({ element }) {
   const { user } = useContext(AuthContext);
-  if (user.authValue < 2) return <Navigate to={'/login'} />;
+  if (user.authValue < 2) return <Navigate to={'/join'} />;
 
   return element;
 }

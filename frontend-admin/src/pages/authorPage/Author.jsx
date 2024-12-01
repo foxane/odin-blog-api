@@ -23,6 +23,7 @@ export default function Author() {
       )}
 
       <div className="grid grid-flow-row gap-3 md:grid-cols-2">
+        {!posts && !loading && <p className="text-center"></p>}
         {posts && posts.map(p => <PostCard key={p.id} post={p} />)}
       </div>
     </div>
