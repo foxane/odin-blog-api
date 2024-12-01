@@ -159,7 +159,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const getAllUserPost = async (req, res, next) => {
   try {
-    if (req.params.userId !== req.user.id || req.user.authValue < 3)
+    if (req.params.userId !== req.user.id && req.user.authValue < 3)
       return errorResponse(res, {
         statusCode: 403,
         message: 'You need to be respective user or an admin to see this',
@@ -167,6 +167,14 @@ export const getAllUserPost = async (req, res, next) => {
 
     const posts = await prisma.post.findMany({
       where: { userId: req.params.userId },
+      include: {
+        categories: {
+          select: { name: true },
+        },
+        comments: {
+          include: { User: true },
+        },
+      },
     });
 
     successResponse(res, {
