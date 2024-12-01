@@ -12,7 +12,7 @@ export default function PostCard({ post }) {
           <p className="text-sm text-neutral-800">
             Categories:
             <span className="font-semibold italic ps-2">
-              {post.categories.join(', ')}
+              {post.categories.map(cat => cat.name).join(', ')}
             </span>
           </p>
           <p className="text-sm text-neutral-800">
@@ -24,7 +24,7 @@ export default function PostCard({ post }) {
           <p className="text-sm text-neutral-800">
             Comments:
             <span className="font-semibold italic p-2">
-              {post.commentCount}
+              {post.comments.length}
             </span>
           </p>
         </div>
