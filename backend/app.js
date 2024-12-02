@@ -14,11 +14,14 @@ import {
 } from './middlewares/errorMiddleware.js';
 
 const app = express();
-app.use((req,res,next) => {
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production') return next();
+
+  // Emulate loading
   setTimeout(() => {
-    next()
+    next();
   }, 1000);
-})
+});
 app.use(cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

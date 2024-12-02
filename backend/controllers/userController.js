@@ -168,9 +168,7 @@ export const getAllUserPost = async (req, res, next) => {
     const posts = await prisma.post.findMany({
       where: { userId: req.params.userId },
       include: {
-        categories: {
-          select: { name: true },
-        },
+        categories: true,
         comments: {
           include: { User: true },
         },
