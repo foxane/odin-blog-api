@@ -36,7 +36,7 @@ export const createPost = async (req, res, next) => {
     });
 
   try {
-    await prisma.post.create({
+    const post = await prisma.post.create({
       data: {
         title,
         content,
@@ -48,10 +48,12 @@ export const createPost = async (req, res, next) => {
           })),
         },
       },
+      include: { categories: true },
     });
 
     successResponse(res, {
-      statusCode: 201,
+      statusCode: 200,
+      data: { post },
     });
   } catch (error) {
     next(error);
@@ -118,23 +120,25 @@ export const publishPost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const { post } = req;
-    const publishStatus = req.body.publish === 'true' || false;
+    const publishStatus = req.body.publish;
     if (post.userId !== req.user.id)
       return errorResponse(res, {
         statusCode: 403,
         message: 'You are not author of this post',
       });
 
-    await prisma.post.update({
+    const postData = await prisma.post.update({
       where: { id: postId },
       data: {
         published: publishStatus,
         publishedAt: publishStatus ? new Date() : null,
       },
+      include: { categories: true },
     });
 
     successResponse(res, {
-      statusCode: 204,
+      statusCode: 200,
+      data: { post: postData },
     });
   } catch (error) {
     next(error);
