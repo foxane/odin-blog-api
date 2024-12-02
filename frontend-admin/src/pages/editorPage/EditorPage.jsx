@@ -1,11 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Categories from './Categories';
 import Button from '../../components/ui/Button';
+import usePost from '../../hooks/usePost';
+import loadingIcon from '../../assets/loading.svg';
 
 export default function EditorPage() {
   const { state } = useLocation();
+  const { loading, error, edit, create, publish } = usePost();
   const [post, setPost] = useState(state);
+
+  useEffect(() => {
+    // Show a toast if there's an error
+    if (error) {
+      toast.error(`Error: ${error}`);
+    }
+  }, [error]);
 
   function onChange(e) {
     setPost({
@@ -14,12 +27,43 @@ export default function EditorPage() {
     });
   }
 
-  // function savePost() {
-  //   const data = {
-  //     ...post,
-  //     categories: post.categories.map(el => el.name),
-  //   };
-  // }
+  function onSubmit() {
+    const token = localStorage.getItem('token');
+    const data = {
+      ...post,
+      categories: post.categories.map(el => el.name),
+    };
+
+    if (data.id) {
+      edit(data, token).then(() => {
+        if (!error) toast.success('Post saved successfully!');
+      });
+    } else {
+      create(data, token).then(res => {
+        // Edit post state to reflect server's
+        if (!error) {
+          setPost(res.data.data.post);
+          toast.success('Post created successfully!');
+        }
+      });
+    }
+  }
+
+  function onPublish() {
+    const token = localStorage.getItem('token');
+    const data = { id: post.id, publish: !post.published };
+
+    publish(data, token).then(res => {
+      if (!error) {
+        setPost(res.data.data.post);
+        toast.success(
+          `Post ${
+            res.data.data.post.published ? 'published' : 'unpublished'
+          } successfully!`,
+        );
+      }
+    });
+  }
 
   return (
     <div className="flex flex-1 bg-slate-100">
@@ -45,8 +89,43 @@ export default function EditorPage() {
 
         {/* Sidebar */}
         <div className="flex flex-col gap-2">
-          <Button>Save</Button>
-          <Button>Publish</Button>
+          {loading ? (
+            <Button disabled={true}>
+              <img
+                src={loadingIcon}
+                alt="loading icon"
+                className="w-6 block mx-auto"
+              />
+            </Button>
+          ) : (
+            <Button
+              onClick={onSubmit}
+              className={`text-white ${
+                post.id ? 'bg-blue-500' : 'bg-green-500'
+              }`}>
+              {post.id ? 'Save' : 'Create'}
+            </Button>
+          )}
+
+          {loading ? (
+            <Button disabled={true}>
+              <img
+                src={loadingIcon}
+                alt="loading icon"
+                className="w-6 block mx-auto"
+              />
+            </Button>
+          ) : (
+            <Button
+              onClick={onPublish}
+              disabled={post.id ? false : true}
+              className={`text-white ${
+                post.published ? 'bg-red-500' : 'bg-green-500'
+              }`}>
+              {post.published ? 'Unpublish' : 'Publish'}
+            </Button>
+          )}
+
           <Categories
             selectedCat={post.categories}
             post={post}
