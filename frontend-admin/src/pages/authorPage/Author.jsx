@@ -2,12 +2,16 @@ import { useContext } from 'react';
 
 import { AuthContext } from '../../AuthProvider';
 import PostCard from './PostCard';
-import usePost from '../../hooks/usePost';
 import loadingIcon from '../../assets/loading.svg';
+import useFetch from '../../hooks/useFetch';
 
 export default function Author() {
   const { user } = useContext(AuthContext);
-  const { loading, error, posts } = usePost(user.id);
+  const {
+    loading,
+    error,
+    data: posts,
+  } = useFetch(`/users/${user.id}/posts/all`, 'posts');
 
   if (error) return <>{error}</>;
   return (

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import editIcon from '../../assets/edit.svg';
 import trashIcon from '../../assets/trash.svg';
 import { formatDate } from '../../lib/utils';
+import { Link } from 'react-router-dom';
 
 export default function PostCard({ post }) {
   return (
@@ -30,12 +31,15 @@ export default function PostCard({ post }) {
           </p>
         </div>
         <div className="flex flex-row mt-2 sm:flex-col gap-1 sm:w-8">
-          <button className="rounded-md p-1 border border-gray-200 hover:bg-slate-200">
+          <Link
+            to={`/editor`}
+            state={post}
+            className="rounded-md p-1 border border-gray-200 hover:bg-slate-200">
             <img src={editIcon} alt="edit icon" className="w-6" />
-          </button>
-          <button className="rounded-md p-1 border border-gray-200 hover:bg-slate-200">
+          </Link>
+          <Link className="rounded-md p-1 border border-gray-200 hover:bg-slate-200">
             <img src={trashIcon} alt="trash icon" className="w-6" />
-          </button>
+          </Link>
         </div>
       </div>
     </>

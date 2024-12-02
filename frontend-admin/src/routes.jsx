@@ -4,6 +4,7 @@ import Author from './pages/authorPage/Author';
 import AuthPage from './pages/authPage/AuthPage';
 import { AuthorRoute, UserRoute } from './ProtectedRoutes';
 import JoinPage from './pages/joinPage/JoinPage';
+import EditorPage from './pages/editorPage/EditorPage';
 
 const routes = createBrowserRouter([
   {
@@ -23,6 +24,12 @@ const routes = createBrowserRouter([
       {
         path: '/join',
         element: <UserRoute element={<JoinPage />} />,
+      },
+      {
+        path: '/editor',
+        element: (
+          <UserRoute element={<AuthorRoute element={<EditorPage />} />} />
+        ),
       },
     ],
   },
