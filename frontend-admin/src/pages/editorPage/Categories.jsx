@@ -3,6 +3,8 @@ import { useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 
 import Button from '../../components/ui/Button';
+import arrowDown from '../../assets/arrow-down.svg';
+import loadingIcon from '../../assets/loading.svg';
 
 export default function Categories({ selectedCat, post, setPost }) {
   const [selected, setSelected] = useState(selectedCat);
@@ -32,15 +34,23 @@ export default function Categories({ selectedCat, post, setPost }) {
 
   if (error) return <>{error}</>;
   return (
-    <div className="flex flex-col rounded-sm p-1">
-      <div
-        className="flex justify-between items-center cursor-pointer rounded-md"
+    <div className="flex flex-col rounded-sm p-0 border border-slate-500">
+      <button
+        className="cursor-pointer flex justify-between p-2 rounded-sm border-b border-slate-500"
         onClick={() => setHidden(!hidden)}>
-        <p className="font-semibold text-lg">Categories</p>
-        <p className="text-sm">{hidden ? 'Show' : 'Hide'}</p>
-      </div>
-      <div className={`${hidden ? 'hidden' : ''} flex flex-col gap-0.5 px-2`}>
-        {loading && <p>Loading...</p>}
+        Categories
+        <img
+          src={arrowDown}
+          alt="arrow icon"
+          className={`${
+            hidden ? 'rotate-0' : 'rotate-180'
+          } w-6 transition-transform`}
+        />
+      </button>
+      <div className={`${hidden ? 'hidden' : ''} flex flex-col px-3 pb-2 mt-2`}>
+        {loading && (
+          <img src={loadingIcon} alt="loading icon" className="w-10 mx-auto" />
+        )}
         {categories &&
           categories.map(cat => {
             const isChecked = selected.some(
@@ -63,7 +73,7 @@ export default function Categories({ selectedCat, post, setPost }) {
             );
           })}
 
-        <Button>Add new</Button>
+        <Button className="mt-3">Add new</Button>
       </div>
     </div>
   );

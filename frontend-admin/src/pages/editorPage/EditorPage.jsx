@@ -103,28 +103,30 @@ export default function EditorPage() {
               className={`text-white ${
                 post.id ? 'bg-blue-500' : 'bg-green-500'
               }`}>
-              {post.id ? 'Save' : 'Create'}
+              {post.id ? 'Save post' : 'Create post'}
             </Button>
           )}
 
-          {loading ? (
-            <Button disabled={true}>
-              <img
-                src={loadingIcon}
-                alt="loading icon"
-                className="w-6 block mx-auto"
-              />
-            </Button>
-          ) : (
-            <Button
-              onClick={onPublish}
-              disabled={post.id ? false : true}
-              className={`text-white ${
-                post.published ? 'bg-red-500' : 'bg-green-500'
-              }`}>
-              {post.published ? 'Unpublish' : 'Publish'}
-            </Button>
-          )}
+          {post.id &&
+            // No post id will hide publish button
+            (loading ? (
+              <Button disabled={true}>
+                <img
+                  src={loadingIcon}
+                  alt="loading icon"
+                  className="w-6 block mx-auto"
+                />
+              </Button>
+            ) : (
+              <Button
+                onClick={onPublish}
+                disabled={post.id ? false : true}
+                className={`text-white ${
+                  post.published ? 'bg-red-500' : 'bg-green-500'
+                }`}>
+                {post.published ? 'Unpublish' : 'Publish'}
+              </Button>
+            ))}
 
           <Categories
             selectedCat={post.categories}

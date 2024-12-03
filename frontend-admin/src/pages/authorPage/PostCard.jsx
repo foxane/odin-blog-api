@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import editIcon from '../../assets/edit.svg';
 import trashIcon from '../../assets/trash.svg';
+import checkIcon from '../../assets/check.svg';
+import crossIcon from '../../assets/cross.svg';
 import { formatDate } from '../../lib/utils';
-import { Link } from 'react-router-dom';
 
 export default function PostCard({ post }) {
   return (
@@ -17,11 +19,16 @@ export default function PostCard({ post }) {
               {post.categories.map(cat => cat.name).join(', ')}
             </span>
           </p>
-          <p className="text-sm text-neutral-800">
+          <p className="text-sm text-neutral-800 flex items-start gap-1">
             Published at:
-            <span className="font-semibold italic p-2">
+            <span className="font-semibold italic">
               {post.publishedAt ? formatDate(post.publishedAt) : 'Unpublished'}
             </span>
+            <img
+              src={post.publishedAt ? checkIcon : crossIcon}
+              alt="status icon"
+              className="w-5"
+            />
           </p>
           <p className="text-sm text-neutral-800">
             Comments:
