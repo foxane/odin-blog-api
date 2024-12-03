@@ -13,7 +13,7 @@ export default function AuthPage() {
 
   if (user) return <Navigate to={'/'} />;
   return (
-    <div className="max-w-md border bg-slate-200 border-slate-400 rounded-md mx-auto p-2 mt-10 relative">
+    <div className="max-w-md border bg-slate-200 border-slate-400 rounded-md mx-auto p-2 my-10 relative">
       {/* Loading overlay */}
       {loading && (
         <div className="absolute inset-0 bg-white bg-opacity-50 z-10 flex flex-col items-center justify-center">

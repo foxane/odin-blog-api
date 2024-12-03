@@ -18,7 +18,6 @@ export default function JoinPage() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    console.log(`Bearer ${localStorage.getItem('token')}`);
 
     try {
       setLoading(true);

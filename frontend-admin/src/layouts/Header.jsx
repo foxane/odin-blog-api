@@ -7,7 +7,7 @@ const Header = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <header className="p-2 px-10 border-b-2 bg-slate-200 shadow shadow-slate-400">
+    <header className="p-2 sm:px-10 border-b-2 bg-slate-200 shadow shadow-slate-400">
       <div className="flex justify-between items-center max-w-screen-2xl mx-auto">
         <Link to={'/'} className="flex items-center">
           <img src={logo} className="w-8 md:w-10" />

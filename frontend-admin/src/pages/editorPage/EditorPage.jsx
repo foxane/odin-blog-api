@@ -81,14 +81,14 @@ export default function EditorPage() {
 
         {/* Editor */}
         <textarea
-          className="col-span-4 border-2 p-2"
+          className="col-span-5 border-2 p-2 sm:col-span-4"
           name="content"
           onChange={onChange}
           value={post.content}
         />
 
         {/* Sidebar */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-2 col-span-5 sm:col-span-1">
           {loading ? (
             <Button disabled={true}>
               <img
