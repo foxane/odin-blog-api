@@ -29,7 +29,8 @@ export default function JoinPage() {
         },
       );
 
-      navigate(0); // Refresh page to make AuthContext fetch user
+      localStorage.removeItem('token'); // Refresh page to make AuthContext fetch user
+      navigate(0);
     } catch (error) {
       if (!error.response) setError(error.message);
       else setError(error.response.data.message);
