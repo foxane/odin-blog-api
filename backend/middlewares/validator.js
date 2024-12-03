@@ -20,7 +20,7 @@ const rules = {
     .trim()
     .notEmpty()
     .withMessage('Name cannot be empty')
-    .isAlpha()
+    .isAlpha('en-US', { ignore: ' ' })
     .withMessage('Name can only contains alphabet'),
   email: body('email')
     .trim()
