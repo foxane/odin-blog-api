@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../AuthProvider';
@@ -9,11 +9,19 @@ import Button from '../../components/ui/Button';
 
 export default function Author() {
   const { user } = useContext(AuthContext);
-  const {
-    loading,
-    error,
-    data: posts,
-  } = useFetch(`/users/${user.id}/posts/all`, 'posts');
+  const { loading, error, data } = useFetch(
+    `/users/${user.id}/posts/all`,
+    'posts',
+  );
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    if (data) setPosts(data);
+  }, [data]);
+
+  const handleRemovePost = postId => {
+    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+  };
 
   if (error) return <>{error}</>;
   return (
@@ -34,7 +42,10 @@ export default function Author() {
       )}
 
       <div className="grid grid-flow-row gap-3 md:grid-cols-2">
-        {posts && posts.map(p => <PostCard key={p.id} post={p} />)}
+        {posts &&
+          posts.map(p => (
+            <PostCard key={p.id} post={p} onRemove={handleRemovePost} />
+          ))}
       </div>
     </div>
   );

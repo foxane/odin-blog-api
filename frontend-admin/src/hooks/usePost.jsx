@@ -37,5 +37,9 @@ export default function usePost() {
     return request('patch', `/posts/${data.id}`, data, token);
   }
 
-  return { loading, error, edit, create, publish };
+  function deletePost(id, token) {
+    return request('delete', `/posts/${id}`, null, token);
+  }
+
+  return { loading, error, edit, create, publish, deletePost };
 }
