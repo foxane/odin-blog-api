@@ -5,11 +5,13 @@ import AuthPage from './pages/authPage/AuthPage';
 import { AuthorRoute, UserRoute } from './ProtectedRoutes';
 import JoinPage from './pages/joinPage/JoinPage';
 import EditorPage from './pages/editorPage/EditorPage';
+import ErrorPage from './pages/errorPage/ErrorPage';
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
@@ -31,6 +33,7 @@ const routes = createBrowserRouter([
           <UserRoute element={<AuthorRoute element={<EditorPage />} />} />
         ),
       },
+      { path: '*', element: <ErrorPage message={'404 :Page not found'} /> },
     ],
   },
 ]);
