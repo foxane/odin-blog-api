@@ -64,22 +64,20 @@ const rules = {
     .isLength({ min: 2 })
     .withMessage('Category name need to be at least 2 characters long'),
 
-  categories: body('categories')
-    .custom(cats => {
-      if (typeof cats !== 'object' || !Array.isArray(cats)) {
-        throw new Error('Category needs to be an array, even if its empty');
-      }
+  categories: body('categories').custom(cats => {
+    if (typeof cats !== 'object' || !Array.isArray(cats)) {
+      throw new Error('Category needs to be an array, even if its empty');
+    }
 
-      cats.forEach(cat => {
-        if (typeof cat !== 'string' || cat.length < 2)
-          throw new Error(
-            'Category name should be string and at least 2 character',
-          );
-      });
+    cats.forEach(cat => {
+      if (typeof cat !== 'string' || cat.length < 2)
+        throw new Error(
+          'Category name should be string and at least 2 character',
+        );
+    });
 
-      return true;
-    })
-    .toLowerCase(),
+    return true;
+  }),
 };
 
 export const regValidation = [

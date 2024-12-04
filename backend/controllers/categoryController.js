@@ -81,3 +81,21 @@ export const deleteCategory = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteUnusedCat = async (req, res, next) => {
+  try {
+    if (req.user.authValue < 3)
+      return errorResponse(res, {
+        statusCode: 403,
+        message: 'Forbidden',
+      });
+
+    await prisma.category.deleteMany({ where: { posts: { none: {} } } });
+
+    successResponse(res, {
+      statusCode: 204,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

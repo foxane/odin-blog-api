@@ -3,6 +3,7 @@ import { categoryValidation } from '../middlewares/validator.js';
 import {
   createCategory,
   deleteCategory,
+  deleteUnusedCat,
   getAllCategory,
   getSingleCategory,
   updateCategory,
@@ -18,6 +19,7 @@ categoryRouter
 categoryRouter
   .route('/')
   .get(getAllCategory)
-  .post(verifyJWT, categoryValidation, createCategory);
+  .post(verifyJWT, categoryValidation, createCategory)
+  .delete(verifyJWT, deleteUnusedCat);
 
 export default categoryRouter;

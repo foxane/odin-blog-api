@@ -1,5 +1,6 @@
 import prisma from '../prisma/prismaClient.js';
 import { errorResponse, successResponse } from '../utils/response.js';
+import { getImageSrc } from '../utils/utils.js';
 
 export const getAllPost = async (req, res, next) => {
   try {
@@ -40,6 +41,7 @@ export const createPost = async (req, res, next) => {
       data: {
         title,
         content,
+        image: getImageSrc(content),
         userId: req.user.id,
         categories: {
           connectOrCreate: categories.map(cat => ({
@@ -75,6 +77,7 @@ export const updatePost = async (req, res, next) => {
       data: {
         title,
         content,
+        image: getImageSrc(content),
         categories: {
           connectOrCreate: categories.map(cat => ({
             where: { name: cat },
