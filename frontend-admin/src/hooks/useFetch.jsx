@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-export default function useFetch(endpoint, responseKey) {
+export default function useFetch(endpoint) {
   const token = localStorage.getItem('token');
   const url = import.meta.env.VITE_API_URL + endpoint;
   const [data, setData] = useState(null);
@@ -16,14 +16,14 @@ export default function useFetch(endpoint, responseKey) {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setData(data.data[responseKey]);
+        setData(data);
       } catch (error) {
         if (!error.response) {
           // Server did not response
           setError('Network error, server seems to be offline');
         } else {
           // Server response
-          setError(error.response.data.message);
+          setError(error.response.message);
         }
       } finally {
         setLoading(false);
@@ -35,7 +35,7 @@ export default function useFetch(endpoint, responseKey) {
       setError('');
       setData(null);
     };
-  }, [token, url, responseKey]);
+  }, [token, url]);
 
   return { loading, data, error };
 }

@@ -48,7 +48,7 @@ export default function EditorPage() {
       create(data, token).then(res => {
         // Edit post state to reflect server's
         if (!error) {
-          setPost(res.data.data.post);
+          setPost(res.data);
           toast.success('Post created successfully!');
         }
       });
@@ -61,10 +61,10 @@ export default function EditorPage() {
 
     publish(data, token).then(res => {
       if (!error) {
-        setPost(res.data.data.post);
+        setPost(res.data);
         toast.success(
           `Post ${
-            res.data.data.post.published ? 'published' : 'unpublished'
+            res.data.published ? 'published' : 'unpublished'
           } successfully!`,
         );
       }

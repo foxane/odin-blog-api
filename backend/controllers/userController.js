@@ -1,22 +1,16 @@
 import prisma from '../prisma/prismaClient.js';
-import { errorResponse, successResponse } from '../utils/response.js';
 import { createJWT } from './authController.js';
 
 export const getAllUser = async (req, res, next) => {
   try {
     if (req.user.authValue < 3)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Forbidden, admin only',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const users = await prisma.user.findMany({
       select: { id: true, name: true, email: true, authValue: true },
     });
 
-    successResponse(res, {
-      data: { users },
-    });
+    res.json(users);
   } catch (error) {
     next(error);
   }
@@ -35,9 +29,7 @@ export const getSingleUser = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { user },
-    });
+    res.json(user);
   } catch (error) {
     next(error);
   }
@@ -56,9 +48,7 @@ export const getSelf = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { user },
-    });
+    res.json(user);
   } catch (error) {
     next(error);
   }
@@ -69,10 +59,7 @@ export const updateUser = async (req, res, next) => {
     const { userId } = req.params;
     const { name, email, password } = req.body;
     if (userId !== req.user.id)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Not your account',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const user = await prisma.user.update({
       where: { id: userId },
@@ -83,16 +70,13 @@ export const updateUser = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      message: 'User data updated',
-      data: {
-        token: createJWT({
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        }),
-      },
-    });
+    res.json(
+      createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
+    );
   } catch (error) {
     next(error);
   }
@@ -104,16 +88,10 @@ export const makeAuthor = async (req, res, next) => {
     const { secret } = req.body;
 
     if (secret !== 'stupid blog' || userId !== req.user.id)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Wrong secret code',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     if (req.user.authValue >= 2)
-      return errorResponse(res, {
-        statusCode: 400,
-        message: "You're already an author",
-      });
+      res.status(400).json({ message: 'Already an author' });
 
     const user = await prisma.user.update({
       where: { id: userId },
@@ -122,16 +100,13 @@ export const makeAuthor = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      message: 'You are now author',
-      data: {
-        token: createJWT({
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        }),
-      },
-    });
+    res.json(
+      createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
+    );
   } catch (error) {
     next(error);
   }
@@ -140,18 +115,13 @@ export const makeAuthor = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   try {
     if (req.user.authValue < 3)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Fucking forbidden',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     await prisma.user.delete({
       where: { id: req.params.userId },
     });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -160,10 +130,7 @@ export const deleteUser = async (req, res, next) => {
 export const getAllUserPost = async (req, res, next) => {
   try {
     if (req.params.userId !== req.user.id && req.user.authValue < 3)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'You need to be respective user or an admin to see this',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const posts = await prisma.post.findMany({
       where: { userId: req.params.userId },
@@ -175,9 +142,7 @@ export const getAllUserPost = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { posts },
-    });
+    res.json(posts);
   } catch (error) {
     next(error);
   }
@@ -192,9 +157,7 @@ export const getPublishedUserPost = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { posts },
-    });
+    res.json(posts);
   } catch (error) {
     next(error);
   }

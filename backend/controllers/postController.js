@@ -1,5 +1,4 @@
 import prisma from '../prisma/prismaClient.js';
-import { errorResponse, successResponse } from '../utils/response.js';
 import { getImageSrc } from '../utils/utils.js';
 
 export const getAllPost = async (req, res, next) => {
@@ -14,27 +13,20 @@ export const getAllPost = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { posts },
-    });
+    res.json(posts);
   } catch (error) {
     next(error);
   }
 };
 
-export const getSinglePost = async (req, res, next) => [
-  successResponse(res, {
-    data: { post: req.post },
-  }),
-];
+export const getSinglePost = async (req, res, next) => {
+  res.json(req.post);
+};
 
 export const createPost = async (req, res, next) => {
   const { title, content, categories } = req.body;
   if (req.user.authValue < 2)
-    return errorResponse(res, {
-      statusCode: 403,
-      message: 'You are not Author',
-    });
+    return res.status(403).json({ message: 'Forbidden' });
 
   try {
     const post = await prisma.post.create({
@@ -53,10 +45,7 @@ export const createPost = async (req, res, next) => {
       include: { categories: true },
     });
 
-    successResponse(res, {
-      statusCode: 200,
-      data: { post },
-    });
+    res.json(post);
   } catch (error) {
     next(error);
   }
@@ -66,13 +55,10 @@ export const updatePost = async (req, res, next) => {
   const { title, content, categories } = req.body;
   const { post } = req;
   if (post.userId !== req.user.id)
-    return errorResponse(res, {
-      statusCode: 403,
-      message: 'You are not author of this post',
-    });
+    return res.status(403).json({ message: 'Forbidden' });
 
   try {
-    await prisma.post.update({
+    const data = await prisma.post.update({
       where: { id: post.id },
       data: {
         title,
@@ -88,9 +74,7 @@ export const updatePost = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.json(data);
   } catch (error) {
     next(error);
   }
@@ -100,20 +84,14 @@ export const deletePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     // Allow only the owner (author) or admin to delete the post
-    if (req.post.userId !== req.user.id && req.user.authValue < 3) {
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Unauthorized',
-      });
-    }
+    if (req.post.userId !== req.user.id && req.user.authValue < 3)
+      return res.status(403).json({ message: 'Forbidden' });
 
     await prisma.post.delete({
       where: { id: postId },
     });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -125,10 +103,7 @@ export const publishPost = async (req, res, next) => {
     const { post } = req;
     const publishStatus = req.body.publish;
     if (post.userId !== req.user.id)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'You are not author of this post',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const postData = await prisma.post.update({
       where: { id: postId },
@@ -139,10 +114,7 @@ export const publishPost = async (req, res, next) => {
       include: { categories: true },
     });
 
-    successResponse(res, {
-      statusCode: 200,
-      data: { post: postData },
-    });
+    res.json(postData);
   } catch (error) {
     next(error);
   }
@@ -160,9 +132,7 @@ export const getCommentByPost = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { comments },
-    });
+    res.json(comments);
   } catch (error) {
     next(error);
   }

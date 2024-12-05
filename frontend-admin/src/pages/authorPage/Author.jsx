@@ -9,10 +9,7 @@ import Button from '../../components/ui/Button';
 
 export default function Author() {
   const { user } = useContext(AuthContext);
-  const { loading, error, data } = useFetch(
-    `/users/${user.id}/posts/all`,
-    'posts',
-  );
+  const { loading, error, data } = useFetch(`/users/${user.id}/posts/all`);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {

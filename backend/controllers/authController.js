@@ -1,5 +1,4 @@
 import prisma from '../prisma/prismaClient.js';
-import { successResponse, errorResponse } from '../utils/response.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -19,20 +18,16 @@ export const register = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      statusCode: 201,
-      message: 'Account created',
-      data: {
-        token: createJWT({
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        }),
-        user: {
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        },
+    res.status(201).json({
+      token: createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
+      user: {
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
       },
     });
   } catch (error) {
@@ -46,33 +41,24 @@ export const login = async (req, res, next) => {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return errorResponse(res, {
-        statusCode: 401,
-        message: 'Invalid credentials',
-      });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return errorResponse(res, {
-        statusCode: 401,
-        message: 'Invalid credentials',
-      });
+      return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    successResponse(res, {
-      statusCode: 200,
-      data: {
-        token: createJWT({
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        }),
-        user: {
-          id: user.id,
-          name: user.name,
-          authValue: user.authValue,
-        },
+    res.json({
+      token: createJWT({
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
+      }),
+      user: {
+        id: user.id,
+        name: user.name,
+        authValue: user.authValue,
       },
     });
   } catch (error) {

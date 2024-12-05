@@ -10,7 +10,7 @@ import arrowDown from '../../assets/arrow-down.svg';
 import loadingIcon from '../../assets/loading.svg';
 
 export default function Categories({ selectedCat, post, setPost }) {
-  const { loading, error, data } = useFetch('/categories', 'categories');
+  const { loading, error, data } = useFetch('/categories');
 
   const [selected, setSelected] = useState(selectedCat);
   const [hidden, setHidden] = useState(true);

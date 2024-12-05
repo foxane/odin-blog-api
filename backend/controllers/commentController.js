@@ -1,12 +1,8 @@
-import { successResponse, errorResponse } from '../utils/response.js';
 import prisma from '../prisma/prismaClient.js';
 
 export const getAllComment = async (req, res, next) => {
   if (req.user.authValue < 3)
-    return errorResponse(res, {
-      statusCode: 403,
-      message: 'Admin only',
-    });
+    return res.status(403).json({ message: 'Forbidden' });
 
   try {
     const comments = await prisma.comment.findMany({
@@ -18,29 +14,24 @@ export const getAllComment = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      data: { comments },
-    });
+    res.json(comments);
   } catch (error) {
     next(error);
   }
 };
 
 export const getSingleComment = async (req, res, next) => {
-  successResponse(res, {
-    data: { comment: req.comment },
-  });
+  res.json(req.comment);
 };
 
 export const createComment = async (req, res, next) => {
   try {
     if (!req.query.postId)
-      return errorResponse(res, {
-        statusCode: 400,
-        message: 'Set postId in url query parameter',
-      });
+      return res
+        .status(400)
+        .json({ message: 'Set postId in url query parameter' });
 
-    await prisma.comment.create({
+    const data = await prisma.comment.create({
       data: {
         content: req.body.content,
         userId: req.user.id,
@@ -48,10 +39,7 @@ export const createComment = async (req, res, next) => {
       },
     });
 
-    successResponse(res, {
-      statusCode: 201,
-      message: 'Comment created',
-    });
+    res.status(201).json(data);
   } catch (error) {
     next(error);
   }
@@ -60,19 +48,14 @@ export const createComment = async (req, res, next) => {
 export const updateComment = async (req, res, next) => {
   try {
     if (req.comment.userId !== req.user.id)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Not your comment',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
-    await prisma.comment.update({
+    const data = await prisma.comment.update({
       where: { id: req.params.commentId },
       data: { content: req.body.content },
     });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.json(data);
   } catch (error) {
     next(error);
   }
@@ -82,16 +65,11 @@ export const deleteComment = async (req, res, next) => {
   try {
     // Allow only the owner or admin to delete the comment
     if (req.comment.userId !== req.user.id && req.user.authValue < 3)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Unauthorized',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     await prisma.comment.delete({ where: { id: req.params.commentId } });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }

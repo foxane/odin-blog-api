@@ -1,16 +1,12 @@
 import prisma from '../prisma/prismaClient.js';
 import { body, validationResult } from 'express-validator';
-import { errorResponse } from '../utils/response.js';
 
 const handleError = (req, res, next) => {
   const result = validationResult(req);
-  if (!result.isEmpty()) {
-    return errorResponse(res, {
-      statusCode: 400,
-      message: 'Validation failed',
-      errorDetails: result.array(),
-    });
-  }
+  if (!result.isEmpty())
+    return res
+      .status(400)
+      .json({ message: 'Validation failed', errorDetails: result.errors });
 
   next();
 };

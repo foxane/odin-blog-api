@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(response => {
-          setUser(response.data.data.user);
+          setUser(response.data.user);
         })
         .catch(() => logout())
         .finally(() => setLoading(false));
@@ -47,8 +47,8 @@ const AuthProvider = ({ children }) => {
         credentials,
       );
 
-      localStorage.setItem('token', data.data.token);
-      setUser(data.data.user);
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
     } catch (error) {
       if (!error.response) {
         // Server did not response

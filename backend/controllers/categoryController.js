@@ -1,13 +1,10 @@
 import prisma from '../prisma/prismaClient.js';
-import { successResponse, errorResponse } from '../utils/response.js';
 
 export const getAllCategory = async (req, res, next) => {
   try {
     const categories = await prisma.category.findMany();
 
-    successResponse(res, {
-      data: { categories },
-    });
+    res.json(categories);
   } catch (error) {
     next(error);
   }
@@ -15,9 +12,7 @@ export const getAllCategory = async (req, res, next) => {
 
 export const getSingleCategory = (req, res, next) => {
   try {
-    successResponse(res, {
-      data: { category: req.category },
-    });
+    res.json(req.category);
   } catch (error) {
     next(error);
   }
@@ -26,17 +21,12 @@ export const getSingleCategory = (req, res, next) => {
 export const createCategory = async (req, res, next) => {
   try {
     if (req.user.authValue < 2)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Forbidden',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const { name } = req.body;
-    await prisma.category.create({ data: { name } });
+    const data = await prisma.category.create({ data: { name } });
 
-    successResponse(res, {
-      statusCode: 201,
-    });
+    res.status(201).json(data);
   } catch (error) {
     next(error);
   }
@@ -45,10 +35,7 @@ export const createCategory = async (req, res, next) => {
 export const updateCategory = async (req, res, next) => {
   try {
     if (req.user.authValue < 2)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Forbidden',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     const { name } = req.body;
     await prisma.category.update({
@@ -56,9 +43,7 @@ export const updateCategory = async (req, res, next) => {
       data: { name },
     });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -67,16 +52,11 @@ export const updateCategory = async (req, res, next) => {
 export const deleteCategory = async (req, res, next) => {
   try {
     if (req.user.authValue < 2)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Forbidden',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     await prisma.category.delete({ where: { id: req.params.categoryId } });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -85,16 +65,11 @@ export const deleteCategory = async (req, res, next) => {
 export const deleteUnusedCat = async (req, res, next) => {
   try {
     if (req.user.authValue < 3)
-      return errorResponse(res, {
-        statusCode: 403,
-        message: 'Forbidden',
-      });
+      return res.status(403).json({ message: 'Forbidden' });
 
     await prisma.category.deleteMany({ where: { posts: { none: {} } } });
 
-    successResponse(res, {
-      statusCode: 204,
-    });
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
