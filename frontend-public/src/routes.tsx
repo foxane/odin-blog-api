@@ -6,6 +6,9 @@ const routes = createBrowserRouter([
     path: '/',
     element: <IndexPage />,
   },
+  {
+    path: '/post/:id',
+  },
 ]);
 
 export default routes;

@@ -14,7 +14,7 @@ export default function PostCard({ post }: Props) {
             {post.title}
           </p>
         </Link>
-        <p className="text-xs">{post.content}</p>
+        {/* <p className="text-xs">{post.content}</p> */}
         <p className="text-sm text-neutral-400 mt-auto">{post.publishedAt}</p>
       </div>
     </div>
@@ -25,7 +25,7 @@ type Props = {
   post: Post;
 };
 
-type Post = {
+export type Post = {
   id: string;
   title: string;
   content: string;
@@ -34,7 +34,7 @@ type Post = {
   publishedAt: string;
   editedAt: string;
 
-  categories: Array<Entity>;
+  categories: Entity[];
   User: Entity;
 };
 

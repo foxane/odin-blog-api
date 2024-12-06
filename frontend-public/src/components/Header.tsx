@@ -9,11 +9,7 @@ import navIcon from '../assets/nav.svg';
 import logoIcon from '../assets/logo.svg';
 import githubIcon from '../assets/github.svg';
 
-const mockUser = {
-  name: 'Long Ass Full Name',
-  email: 'somerandomemailthatabsolutelynooneuse@gmail.com',
-  authValue: 3,
-};
+const mockUser = Math.floor(Math.random());
 
 export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -62,7 +58,19 @@ export default function Header() {
 
               {/* Menu */}
               <div className="flex flex-col gap-2 h-full">
-                <UserCard user={mockUser} />
+                {mockUser ? (
+                  <UserCard user={mockUser} />
+                ) : (
+                  <div className="flex justify-evenly">
+                    <button className="px-3 py-1 rounded text-neutral-300 border border-neutral-300 hover:bg-neutral-600">
+                      Login
+                    </button>
+                    <button className="px-3 py-1 rounded text-neutral-900 bg-neutral-300 border hover:bg-neutral-100">
+                      Register
+                    </button>
+                  </div>
+                )}
+
                 <Navbar />
                 <Link
                   to={'/'}
