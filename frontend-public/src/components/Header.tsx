@@ -19,13 +19,14 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   return (
-    <header className="h-20 px-5 flex justify-between items-center">
+    <header className="py-2 px-5 mx-auto flex justify-between items-center max-w-screen-xl">
       <Link
         to={'/'}
         className="text-xl font-semibold font-serif flex items-end">
         <img src={logoIcon} alt="logo" width={'40'} />
         BlogName
       </Link>
+
       <button
         className="border p-2 rounded-md border-neutral-700 hover:bg-neutral-700"
         onClick={() => {
