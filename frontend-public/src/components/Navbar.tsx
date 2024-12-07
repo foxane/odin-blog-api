@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import useFetch from '../hooks/useFetch';
+import { Entity } from './PostCard';
 
 export default function Navbar() {
   const [isCatOpen, setIsCatOpen] = useState(false);
+  const {
+    data: categories,
+    loading,
+    error,
+  } = useFetch<Entity[]>('/categories');
 
   return (
     <nav className="flex flex-col flex-1 gap-1 text-lg font-semibold ms-2 mt-5">
@@ -39,17 +46,17 @@ export default function Navbar() {
           </Link>
         </div>
         {isCatOpen && (
-          <ul className="ps-2 font-thin mb-5">
-            <li className="hover:text-amber-200 cursor-pointer">cat 1</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 2</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 3</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 4</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 5</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 6</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 7</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 8</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 9</li>
-            <li className="hover:text-amber-200 cursor-pointer">cat 10</li>
+          <ul className="mt-1 ps-2 font-medium mb-5">
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
+            {categories &&
+              categories.map(cat => (
+                <li
+                  key={cat.id}
+                  className="hover:text-amber-200 cursor-pointer">
+                  {cat.name}
+                </li>
+              ))}
           </ul>
         )}
       </div>

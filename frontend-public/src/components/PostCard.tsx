@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { formatDate } from '../utils/utils';
 
 export default function PostCard({ post }: Props) {
   return (
@@ -15,7 +16,9 @@ export default function PostCard({ post }: Props) {
           </p>
         </Link>
         {/* <p className="text-xs">{post.content}</p> */}
-        <p className="text-sm text-neutral-400 mt-auto">{post.publishedAt}</p>
+        <p className="text-sm text-neutral-400 mt-auto">
+          {formatDate(post.publishedAt)}
+        </p>
       </div>
     </div>
   );
@@ -38,7 +41,7 @@ export type Post = {
   User: Entity;
 };
 
-interface Entity {
+export interface Entity {
   id: string;
   name: string;
 }

@@ -15,7 +15,7 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   return (
-    <header className="py-2 px-5 mx-auto flex justify-between items-center max-w-screen-xl">
+    <header className="py-4 px-5 mx-auto flex justify-between items-center max-w-screen-xl">
       <Link
         to={'/'}
         className="text-xl font-semibold font-serif flex items-end">
