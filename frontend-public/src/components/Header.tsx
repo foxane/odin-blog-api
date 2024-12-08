@@ -8,11 +8,11 @@ import Navbar from './Navbar';
 import navIcon from '../assets/nav.svg';
 import logoIcon from '../assets/logo.svg';
 import githubIcon from '../assets/github.svg';
-
-const mockUser = Math.floor(Math.random());
+import useUser from '../hooks/useUser';
 
 export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const { user } = useUser();
 
   return (
     <header className="py-4 px-5 mx-auto flex justify-between items-center max-w-screen-xl">
@@ -58,8 +58,8 @@ export default function Header() {
 
               {/* Menu */}
               <div className="flex flex-col gap-2 h-full">
-                {mockUser ? (
-                  <UserCard user={mockUser} />
+                {user ? (
+                  <UserCard />
                 ) : (
                   <div className="flex justify-evenly">
                     <button className="px-3 py-1 rounded text-neutral-300 border border-neutral-300 hover:bg-neutral-600">
