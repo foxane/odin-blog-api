@@ -3,10 +3,12 @@ import { body, validationResult } from 'express-validator';
 
 const handleError = (req, res, next) => {
   const result = validationResult(req);
-  if (!result.isEmpty())
+  if (!result.isEmpty()) {
+    const errors = result.errors.map(err => err.msg);
     return res
       .status(400)
-      .json({ message: 'Validation failed', errorDetails: result.errors });
+      .json({ message: 'Validation failed', errorDetails: errors });
+  }
 
   next();
 };

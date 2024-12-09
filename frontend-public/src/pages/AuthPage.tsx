@@ -8,18 +8,27 @@ import FormGroup from '../components/ui/FormGroup';
 
 export default function AuthPage() {
   const [type, setType] = useState('login');
-  const [cred, setCred] = useState({});
-  const { user } = useUser();
+  const [cred, setCred] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const { user, login, register, error } = useUser();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (type === 'login') {
+      const { email, password } = cred;
+      void login({ email, password });
+    } else {
+      void register(cred);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setCred(prev => ({ ...prev, [name]: value }));
-    console.log(cred);
   };
 
   if (user) {
@@ -51,9 +60,13 @@ export default function AuthPage() {
         <form
           className="mt-10 p-6 space-y-5 rounded bg-neutral-800 border border-neutral-600"
           onSubmit={handleSubmit}>
-          <p className="p-2 text-center text-red-400 border border-red-500 rounded">
-            Error
-          </p>
+          {error && (
+            <ul className="p-2 text-center text-red-400 border border-red-500 rounded">
+              {error.message}
+              {error.errorDetails &&
+                error.errorDetails.map(err => <li key={err}>{err}</li>)}
+            </ul>
+          )}
 
           {type === 'login' ? (
             <>

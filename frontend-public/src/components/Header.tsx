@@ -62,12 +62,16 @@ export default function Header() {
                   <UserCard />
                 ) : (
                   <div className="flex justify-evenly">
-                    <button className="px-3 py-1 rounded text-neutral-300 border border-neutral-300 hover:bg-neutral-600">
+                    <Link
+                      to={'/auth'}
+                      className="px-3 py-1 rounded text-neutral-300 border border-neutral-300 hover:bg-neutral-600">
                       Login
-                    </button>
-                    <button className="px-3 py-1 rounded text-neutral-900 bg-neutral-300 border hover:bg-neutral-100">
+                    </Link>
+                    <Link
+                      to={'/auth'}
+                      className="px-3 py-1 rounded text-neutral-900 bg-neutral-300 border hover:bg-neutral-100">
                       Register
-                    </button>
+                    </Link>
                   </div>
                 )}
 

@@ -40,7 +40,7 @@ export default function FormRegister() {
             {error.message}
           </p>
           {error.errorDetails &&
-            error.errorDetails.map(err => <li key={err.msg}>{err.msg}</li>)}
+            error.errorDetails.map(err => <li key={err}>{err}</li>)}
         </ul>
       )}
 
