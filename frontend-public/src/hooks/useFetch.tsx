@@ -6,9 +6,14 @@ export default function useFetch<T>(endpoint: string) {
   const url = import.meta.env.VITE_API_URL + endpoint;
   const token = localStorage.getItem('token');
 
+  const [refreshBool, setRefresh] = useState(false);
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const refresh = () => {
+    setRefresh(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -29,11 +34,12 @@ export default function useFetch<T>(endpoint: string) {
         setError('Error fetching data');
       } finally {
         setLoading(false);
+        setRefresh(false);
       }
     };
 
     void fetchData();
-  }, [url, token]);
+  }, [url, token, refreshBool]);
 
-  return { data, loading, error };
+  return { data, loading, error, refresh };
 }

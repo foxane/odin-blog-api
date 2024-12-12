@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 
 import { formatDate } from '../utils/utils';
@@ -9,17 +9,20 @@ import axios from 'axios';
 
 export default function Comment() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const {
     data: comments,
     loading,
-    error,
+    error: fetchError,
+    refresh,
   } = useFetch<Com[]>(`/posts/${id || ''}/comments`);
   const { user } = useUser();
   const [comment, setComment] = useState('');
+  const [postError, setPostError] = useState('');
+  const [postLoading, setPostLoading] = useState(false);
 
   const submitComment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setPostLoading(true);
 
     axios
       .post(
@@ -33,8 +36,16 @@ export default function Comment() {
           },
         },
       )
-      .then(() => navigate(0))
-      .catch(() => navigate(0)); // Placeholder for error, i'll come back later. maybe
+      .then(() => {
+        refresh();
+      })
+      .catch(() => {
+        setPostError('Error posting comment');
+      })
+      .finally(() => {
+        setComment('');
+        setPostLoading(false);
+      });
   };
 
   return (
@@ -47,19 +58,27 @@ export default function Comment() {
         {user ? (
           <>
             <p className="font-semibold">Post comment</p>
-            <textarea
-              onChange={e => {
-                setComment(e.target.value);
-              }}
-              className="bg-neutral-600 text-white rounded"
-              required
-              name="comment"
-              id="comment"></textarea>
-            <button
-              type="submit"
-              className="py-1 px-3 me-auto rounded bg-neutral-200 text-black">
-              Submit
-            </button>
+            {postError && <p className="text-red-300">{postError}</p>}
+            {!postLoading ? (
+              <>
+                <textarea
+                  onChange={e => {
+                    setComment(e.target.value);
+                  }}
+                  className="bg-neutral-600 text-white rounded"
+                  required
+                  minLength={5}
+                  name="comment"
+                  id="comment"></textarea>
+                <button
+                  type="submit"
+                  className="py-1 px-3 me-auto rounded bg-neutral-200 text-black">
+                  Submit
+                </button>
+              </>
+            ) : (
+              <p>Posting comment...</p>
+            )}
           </>
         ) : (
           <p>You need to login to post comment</p>
@@ -68,7 +87,7 @@ export default function Comment() {
 
       <div className="mt-4 space-y-3">
         {loading && <p>loading..</p>}
-        {error && <p>{error}</p>}
+        {fetchError && <p>{fetchError}</p>}
         {comments &&
           comments.map(com => (
             <div key={com.id} className="p-2 border rounded border-neutral-500">

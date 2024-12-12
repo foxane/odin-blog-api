@@ -125,6 +125,7 @@ export const getCommentByPost = async (req, res, next) => {
     const { postId } = req.params;
     const comments = await prisma.comment.findMany({
       where: { postId },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         createdAt: true,

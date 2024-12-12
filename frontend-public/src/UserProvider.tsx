@@ -42,8 +42,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUser(response.data);
-        } catch (err) {
-          console.error(err);
+        } catch {
+          setUser(null);
           setError(new ApiError('Failed to fetch user details', null));
         } finally {
           setLoading(false);
